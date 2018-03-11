@@ -1,61 +1,68 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class Main_9019 {
-	private static int A, B;
 	public static void main(String args[]) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		/*
 		int T = Integer.parseInt(br.readLine());
 		for(int t=0;t<T;t++) {
-			StringTokenizer st = new StringTokenizer(br.readLine()," ");
-			A = Integer.parseInt(st.nextToken());
-			B = Integer.parseInt(st.nextToken());
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int A = Integer.parseInt(st.nextToken());
+			int B = Integer.parseInt(st.nextToken());
+			
+			LinkedList<data> que = new LinkedList<>();
+			String result = "";
+			que.add(new data(A, ""));
+			while(!que.isEmpty()) {
+				data cur = que.remove(0);
+				if(cur.d == B) {
+					result = cur.s;
+					break;
+				}
+				que.addLast(new data(D(cur.d), cur.s+"D"));
+				que.addLast(new data(S(cur.d), cur.s+"S"));
+				que.addLast(new data(L(cur.d), cur.s+"L"));
+				que.addLast(new data(R(cur.d), cur.s+"R"));
+			}
+			System.out.println(result);
 		}
-		*/
-		DSLR dslr = new DSLR();
-		dslr.data = 1234;
-		dslr.calcLR(false);
-		System.out.println(dslr.data);
+	}
+	
+	private static int D(int input) {
+		return input*2%10000;
+	}
+	
+	private static int S(int input) {
+		if(input == 0) return 9999;
+		else return input-1;
+	}
+	
+	private static int L(int input) {
+		input *= 10;
+		int temp = input/10000;
+		input %= 10000;
+		return input += temp;
+	}
+	
+	private static int R(int input) {
+		int temp = (input%10)*1000;
+		input /= 10;
+		return input += temp;
 	}
 }
 
-class DSLR {
-	int data;
+class data {
+	String s;
+	int d;
 	
-	public void calcD() {
-		data *= 2;
-		if(data > 9999) data /= 10000;
+	data(int d, String s) {
+		this.d = d;
+		this.s = s;
 	}
 	
-	public void calcS() {
-		if(--data ==0) data = 9999;
-	}
-	
-	public void calcLR(boolean L) {
-		int[] ds = new int[4];
-		int temp = data;
-		int temp_d = 0;
-		for(int i=3;i>=0;i--) {
-			temp_d = temp%10;
-			temp = temp/10;
-			System.out.println(i);
-			System.out.println(temp_d);
-			System.out.println();
-			if(L) {
-				if(i==0) ds[3] = temp_d;
-				else ds[i-1] = temp_d;
-			} else {
-				if(i==3) ds[0] = temp_d;
-				else ds[i+1] = temp_d;
-			}
-		}
-		temp = 1;
-		data = 0;
-		for(int i=3;i>=0;i--) {
-			data += ds[i]*temp;
-			temp *= 10;
-		}
+	public String toString() {
+		return s +" " + d;
 	}
 }
